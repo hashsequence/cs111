@@ -1,0 +1,131 @@
+Total: 1732 samples
+    1674  96.7%  96.7%     1731  99.9% thread_func
+      37   2.1%  98.8%       45   2.6% SortedList_lookup
+      17   1.0%  99.8%       17   1.0% __strcmp_sse42
+       3   0.2%  99.9%       12   0.7% SortedList_insert
+       1   0.1% 100.0%        1   0.1% pthread_join
+       0   0.0% 100.0%     1731  99.9% __clone
+       0   0.0% 100.0%        1   0.1% __libc_start_main
+       0   0.0% 100.0%        1   0.1% _start
+       0   0.0% 100.0%        1   0.1% main
+       0   0.0% 100.0%     1731  99.9% start_thread
+ROUTINE ====================== thread_func in /u/eng/class/classave/cs111/lab2/lab2a/lab2_list.c
+  1674   1731 Total samples (flat / cumulative)
+     .      .  331:   return all_elements;
+     .      .  332:   
+     .      .  333: }
+     .      .  334: 
+     .      .  335: void* thread_func(void* arg)
+---
+     .      .  336: {
+     .      .  337:   int k = 0;
+     .      .  338:   int* num = (int*) arg;
+     .      .  339:   //   printf("++++++++++++++++++++++++num %d\n", *num);
+     .      .  340:   SortedListElement_t* curr;
+     .      .  341:   for (k = 0; k < niters; k++)
+     .      .  342:     {
+     .      .  343:       switch(synchro)
+     .      .  344:       {
+     .      .  345:       case 'm':
+     .      .  346: 	pthread_mutex_lock(&my_mutex_lock);
+     .      .  347: 	SortedList_insert(my_list, &(e_arr[*num][k])); 
+     .      .  348: 	pthread_mutex_unlock(&my_mutex_lock);
+     .      .  349: 	break;
+     .      .  350:       case 's':
+  1105   1105  351: 	while(__sync_lock_test_and_set(&my_synch_lock, 1));
+     .     12  352: 	SortedList_insert(my_list, &(e_arr[*num][k]));
+     .      .  353: 	__sync_lock_release(&my_synch_lock);
+     .      .  354: 	break;
+     .      .  355:       default:
+     .      .  356: 	SortedList_insert(my_list, &(e_arr[*num][k]));
+     .      .  357:       }
+     .      .  358:     }
+     .      .  359:   counter  = SortedList_length(my_list);
+     .      .  360:          
+     .      .  361:   for (k = 0; k < niters; k++)
+     .      .  362:     {
+     .      .  363:       switch(synchro)
+     .      .  364:       {
+     .      .  365:       case 'm':
+     .      .  366: 	pthread_mutex_lock(&my_mutex_lock);
+     .      .  367: 	curr = SortedList_lookup(my_list, e_arr[*num][k].key);
+     .      .  368: 	SortedList_delete(curr);
+     .      .  369: 	pthread_mutex_unlock(&my_mutex_lock);
+     .      .  370: 	break;
+     .      .  371:       case 's':
+   569    569  372: 	while(__sync_lock_test_and_set(&my_synch_lock, 1));
+     .     45  373: 	curr = SortedList_lookup(my_list, e_arr[*num][k].key);
+     .      .  374: 	SortedList_delete(curr);
+     .      .  375: 	__sync_lock_release(&my_synch_lock);
+     .      .  376: 	break;
+     .      .  377:       default: 
+     .      .  378: 	curr = SortedList_lookup(my_list, e_arr[*num][k].key);
+     .      .  379: 	SortedList_delete(curr);       
+     .      .  380:       }
+     .      .  381:     }
+     .      .  382:    counter  = SortedList_length(my_list);
+     .      .  383:   
+     .      .  384:    return NULL;
+     .      .  385: }
+---
+     .      .  386: 
+ROUTINE ====================== thread_func in /u/eng/class/classave/cs111/lab2/lab2a/lab2_list.c
+  1674   1731 Total samples (flat / cumulative)
+     .      .  331:   return all_elements;
+     .      .  332:   
+     .      .  333: }
+     .      .  334: 
+     .      .  335: void* thread_func(void* arg)
+---
+     .      .  336: {
+     .      .  337:   int k = 0;
+     .      .  338:   int* num = (int*) arg;
+     .      .  339:   //   printf("++++++++++++++++++++++++num %d\n", *num);
+     .      .  340:   SortedListElement_t* curr;
+     .      .  341:   for (k = 0; k < niters; k++)
+     .      .  342:     {
+     .      .  343:       switch(synchro)
+     .      .  344:       {
+     .      .  345:       case 'm':
+     .      .  346: 	pthread_mutex_lock(&my_mutex_lock);
+     .      .  347: 	SortedList_insert(my_list, &(e_arr[*num][k])); 
+     .      .  348: 	pthread_mutex_unlock(&my_mutex_lock);
+     .      .  349: 	break;
+     .      .  350:       case 's':
+  1105   1105  351: 	while(__sync_lock_test_and_set(&my_synch_lock, 1));
+     .     12  352: 	SortedList_insert(my_list, &(e_arr[*num][k]));
+     .      .  353: 	__sync_lock_release(&my_synch_lock);
+     .      .  354: 	break;
+     .      .  355:       default:
+     .      .  356: 	SortedList_insert(my_list, &(e_arr[*num][k]));
+     .      .  357:       }
+     .      .  358:     }
+     .      .  359:   counter  = SortedList_length(my_list);
+     .      .  360:          
+     .      .  361:   for (k = 0; k < niters; k++)
+     .      .  362:     {
+     .      .  363:       switch(synchro)
+     .      .  364:       {
+     .      .  365:       case 'm':
+     .      .  366: 	pthread_mutex_lock(&my_mutex_lock);
+     .      .  367: 	curr = SortedList_lookup(my_list, e_arr[*num][k].key);
+     .      .  368: 	SortedList_delete(curr);
+     .      .  369: 	pthread_mutex_unlock(&my_mutex_lock);
+     .      .  370: 	break;
+     .      .  371:       case 's':
+   569    569  372: 	while(__sync_lock_test_and_set(&my_synch_lock, 1));
+     .     45  373: 	curr = SortedList_lookup(my_list, e_arr[*num][k].key);
+     .      .  374: 	SortedList_delete(curr);
+     .      .  375: 	__sync_lock_release(&my_synch_lock);
+     .      .  376: 	break;
+     .      .  377:       default: 
+     .      .  378: 	curr = SortedList_lookup(my_list, e_arr[*num][k].key);
+     .      .  379: 	SortedList_delete(curr);       
+     .      .  380:       }
+     .      .  381:     }
+     .      .  382:    counter  = SortedList_length(my_list);
+     .      .  383:   
+     .      .  384:    return NULL;
+     .      .  385: }
+---
+     .      .  386: 

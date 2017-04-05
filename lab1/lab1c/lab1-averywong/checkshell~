@@ -1,0 +1,10 @@
+#!/bin/bash
+if grep -q 'bash' /proc/$$/cmdline ;
+then
+    echo "This is bash"
+else
+    echo "This is some other shell"
+fi
+
+time cat < a0.txt > out.txt; \
+times

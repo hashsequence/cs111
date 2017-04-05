@@ -1,0 +1,13 @@
+#!/bin/sh
+export PATH=/usr/local/cs:$PATH
+
+
+echo "++++++++++++++++dash tests+++++++++++++"
+echo "---------------------test 3--------------------"
+cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 100000 | head -n 1 > a
+times
+/usr/bin/time -f "Max resident set size:\t%M\nBlock Input\t%I\nBlock Output\t%O\nPage Reclaims:\t%R\nPage Faults:\t%F\nVoluntary context switches:\t%w\nInvoluntary context switches:\t%c\n" cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 100000 | head -n 1 > a
+rm -rf a  
+
+
+

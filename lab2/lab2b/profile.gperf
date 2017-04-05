@@ -1,0 +1,256 @@
+Total: 321 samples
+     274  85.4%  85.4%      321 100.0% thread_func2
+      36  11.2%  96.6%       36  11.2% __strcmp_sse42
+       6   1.9%  98.4%       22   6.9% SortedList_insert
+       4   1.2%  99.7%       25   7.8% SortedList_lookup
+       1   0.3% 100.0%        1   0.3% _init
+       0   0.0% 100.0%      321 100.0% __clone
+       0   0.0% 100.0%      321 100.0% start_thread
+ROUTINE ====================== thread_func2 in /u/eng/class/classave/cs111/lab2/lab2b/lab2_list.c
+   274    321 Total samples (flat / cumulative)
+     .      .  490:   return temp;
+     .      .  491:   
+     .      .  492: }
+     .      .  493: 
+     .      .  494: void* thread_func2(void* arg)
+---
+     .      .  495: {
+     .      .  496:   int check = 0;
+     .      .  497:   int k = 0;
+     .      .  498:   int* num = (int*) arg;
+     .      .  499:   //  printf("++++++++++++++++++++++++num %d\n", *num);
+     .      .  500:   SortedListElement_t* curr;
+     .      .  501:   for (k = 0; k < niters; k++)
+     .      .  502:     {
+     .      .  503:       switch(synchro)
+     .      .  504:       {
+     .      .  505:       case 'm': 
+     .      .  506: 	check = 0;
+     .      .  507: 	check = clock_gettime(CLOCK_MONOTONIC, &threadtime_s[*num]);
+     .      .  508: 	if (check == -1)
+     .      .  509: 	  {
+     .      .  510: 	    fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  511: 	  }
+     .      .  512: 	pthread_mutex_lock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  513: 	check = clock_gettime(CLOCK_MONOTONIC, &threadtime_e[*num]);
+     .      .  514: 	if (check == -1)
+     .      .  515: 	  {
+     .      .  516: 	    fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  517: 	  }
+     .      .  518: 	threadtime_c[*num][k] += (threadtime_e[*num].tv_sec - threadtime_s[*num].tv_sec) * 1000000000 + (threadtime_e[*num].tv_nsec - threadtime_s[*num].tv_nsec);
+     .      .  519: 	//printf("threadtime_c[%d][%d]: %d\n", *num,k, threadtime_c[*num][k]);
+     .      .  520: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  521: 	pthread_mutex_unlock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  522: 	break;
+     .      .  523:       case 's':
+   215    215  524: 	while(__sync_lock_test_and_set(&sub_spin_lock[e_hash[*num][k]], 1));
+     .     22  525: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  526: 	__sync_lock_release(&sub_spin_lock[e_hash[*num][k]]);
+     .      .  527: 	break;
+     .      .  528:       default:
+     .      .  529: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  530:       }
+     .      .  531:     }
+     .      .  532:   
+     .      .  533:   counter = 0;
+     .      .  534:        switch(synchro)
+     .      .  535:       {
+     .      .  536:       case 'm':
+     .      .  537: 	for (k = 0; k < num_lists; k++)
+     .      .  538: 	  {
+     .      .  539: 	    check = 0;
+     .      .  540: 	    check = clock_gettime(CLOCK_MONOTONIC, &threadtime_s[*num]);
+     .      .  541: 	    if (check == -1)
+     .      .  542: 	      {
+     .      .  543: 		fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  544: 	      }
+     .      .  545: 	    pthread_mutex_lock(&sub_mutex_lock[k]);
+     .      .  546: 	    check = clock_gettime(CLOCK_MONOTONIC, &threadtime_e[*num]);
+     .      .  547: 	    if (check == -1)
+     .      .  548: 	      {
+     .      .  549: 		fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  550: 	      }
+     .      .  551: 	    threadtime_c[*num][k] += (threadtime_e[*num].tv_sec - threadtime_s[*num].tv_sec) * 1000000000 + (threadtime_e[*num].tv_nsec - threadtime_s[*num].tv_nsec);
+     .      .  552: 	    counter+=SortedList_length(sub_list[k]);
+     .      .  553: 	    pthread_mutex_unlock(&sub_mutex_lock[k]);
+     .      .  554: 	  }
+     .      .  555: 	break;
+     .      .  556:       case 's':
+     .      .  557: 	for (k = 0; k < num_lists; k++)
+     .      .  558: 	  {
+     3      3  559: 	    while(__sync_lock_test_and_set(&sub_spin_lock[k], 1));
+     .      .  560: 	    counter+=SortedList_length(sub_list[k]); 
+     .      .  561: 	    __sync_lock_release(&sub_spin_lock[k]);
+     .      .  562: 	  }
+     .      .  563: 	break;
+     .      .  564:       default:
+     .      .  565: 	for (k = 0; k < num_lists; k++)
+     .      .  566: 	  counter+=SortedList_length(sub_list[k]); 
+     .      .  567:       }
+     .      .  568:         
+     .      .  569:        for (k = 0; k < niters; k++)
+     .      .  570:     {
+     .      .  571:       switch(synchro)
+     .      .  572:       {
+     .      .  573:       case 'm':
+     .      .  574: 	check = 0;
+     .      .  575: 	check = clock_gettime(CLOCK_MONOTONIC, &threadtime_s[*num]);
+     .      .  576: 	if (check == -1)
+     .      .  577: 	   {
+     .      .  578: 	     fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  579: 	   }
+     .      .  580: 	pthread_mutex_lock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  581: 	check = clock_gettime(CLOCK_MONOTONIC, &threadtime_e[*num]);
+     .      .  582: 	if (check == -1)
+     .      .  583:           {
+     .      .  584: 	     fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  585: 	  }
+     .      .  586:         threadtime_c[*num][k] += (threadtime_e[*num].tv_sec - threadtime_s[*num].tv_sec) * 1000000000 + (threadtime_e[*num].tv_nsec - threadtime_s[*num].tv_nsec);
+     .      .  587: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  588: 	SortedList_delete(curr);
+     .      .  589: 	pthread_mutex_unlock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  590: 	break;
+     .      .  591:       case 's':
+    56     56  592: 	while(__sync_lock_test_and_set(&sub_spin_lock[e_hash[*num][k]], 1));
+     .     25  593: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  594: 	SortedList_delete(curr);
+     .      .  595: 	__sync_lock_release(&sub_spin_lock[e_hash[*num][k]]);
+     .      .  596: 	break;
+     .      .  597:       default: 
+     .      .  598: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  599: 	SortedList_delete(curr);       
+     .      .  600:       }
+     .      .  601:     }
+     .      .  602:        
+     .      .  603:        return NULL;
+     .      .  604: }
+---
+     .      .  605: 
+     .      .  606: void freesubs()
+     .      .  607: {
+     .      .  608:   free(sub_spin_lock);
+     .      .  609:   free(sub_mutex_lock);
+ROUTINE ====================== thread_func2 in /u/eng/class/classave/cs111/lab2/lab2b/lab2_list.c
+   274    321 Total samples (flat / cumulative)
+     .      .  490:   return temp;
+     .      .  491:   
+     .      .  492: }
+     .      .  493: 
+     .      .  494: void* thread_func2(void* arg)
+---
+     .      .  495: {
+     .      .  496:   int check = 0;
+     .      .  497:   int k = 0;
+     .      .  498:   int* num = (int*) arg;
+     .      .  499:   //  printf("++++++++++++++++++++++++num %d\n", *num);
+     .      .  500:   SortedListElement_t* curr;
+     .      .  501:   for (k = 0; k < niters; k++)
+     .      .  502:     {
+     .      .  503:       switch(synchro)
+     .      .  504:       {
+     .      .  505:       case 'm': 
+     .      .  506: 	check = 0;
+     .      .  507: 	check = clock_gettime(CLOCK_MONOTONIC, &threadtime_s[*num]);
+     .      .  508: 	if (check == -1)
+     .      .  509: 	  {
+     .      .  510: 	    fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  511: 	  }
+     .      .  512: 	pthread_mutex_lock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  513: 	check = clock_gettime(CLOCK_MONOTONIC, &threadtime_e[*num]);
+     .      .  514: 	if (check == -1)
+     .      .  515: 	  {
+     .      .  516: 	    fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  517: 	  }
+     .      .  518: 	threadtime_c[*num][k] += (threadtime_e[*num].tv_sec - threadtime_s[*num].tv_sec) * 1000000000 + (threadtime_e[*num].tv_nsec - threadtime_s[*num].tv_nsec);
+     .      .  519: 	//printf("threadtime_c[%d][%d]: %d\n", *num,k, threadtime_c[*num][k]);
+     .      .  520: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  521: 	pthread_mutex_unlock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  522: 	break;
+     .      .  523:       case 's':
+   215    215  524: 	while(__sync_lock_test_and_set(&sub_spin_lock[e_hash[*num][k]], 1));
+     .     22  525: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  526: 	__sync_lock_release(&sub_spin_lock[e_hash[*num][k]]);
+     .      .  527: 	break;
+     .      .  528:       default:
+     .      .  529: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  530:       }
+     .      .  531:     }
+     .      .  532:   
+     .      .  533:   counter = 0;
+     .      .  534:        switch(synchro)
+     .      .  535:       {
+     .      .  536:       case 'm':
+     .      .  537: 	for (k = 0; k < num_lists; k++)
+     .      .  538: 	  {
+     .      .  539: 	    check = 0;
+     .      .  540: 	    check = clock_gettime(CLOCK_MONOTONIC, &threadtime_s[*num]);
+     .      .  541: 	    if (check == -1)
+     .      .  542: 	      {
+     .      .  543: 		fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  544: 	      }
+     .      .  545: 	    pthread_mutex_lock(&sub_mutex_lock[k]);
+     .      .  546: 	    check = clock_gettime(CLOCK_MONOTONIC, &threadtime_e[*num]);
+     .      .  547: 	    if (check == -1)
+     .      .  548: 	      {
+     .      .  549: 		fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  550: 	      }
+     .      .  551: 	    threadtime_c[*num][k] += (threadtime_e[*num].tv_sec - threadtime_s[*num].tv_sec) * 1000000000 + (threadtime_e[*num].tv_nsec - threadtime_s[*num].tv_nsec);
+     .      .  552: 	    counter+=SortedList_length(sub_list[k]);
+     .      .  553: 	    pthread_mutex_unlock(&sub_mutex_lock[k]);
+     .      .  554: 	  }
+     .      .  555: 	break;
+     .      .  556:       case 's':
+     .      .  557: 	for (k = 0; k < num_lists; k++)
+     .      .  558: 	  {
+     3      3  559: 	    while(__sync_lock_test_and_set(&sub_spin_lock[k], 1));
+     .      .  560: 	    counter+=SortedList_length(sub_list[k]); 
+     .      .  561: 	    __sync_lock_release(&sub_spin_lock[k]);
+     .      .  562: 	  }
+     .      .  563: 	break;
+     .      .  564:       default:
+     .      .  565: 	for (k = 0; k < num_lists; k++)
+     .      .  566: 	  counter+=SortedList_length(sub_list[k]); 
+     .      .  567:       }
+     .      .  568:         
+     .      .  569:        for (k = 0; k < niters; k++)
+     .      .  570:     {
+     .      .  571:       switch(synchro)
+     .      .  572:       {
+     .      .  573:       case 'm':
+     .      .  574: 	check = 0;
+     .      .  575: 	check = clock_gettime(CLOCK_MONOTONIC, &threadtime_s[*num]);
+     .      .  576: 	if (check == -1)
+     .      .  577: 	   {
+     .      .  578: 	     fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  579: 	   }
+     .      .  580: 	pthread_mutex_lock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  581: 	check = clock_gettime(CLOCK_MONOTONIC, &threadtime_e[*num]);
+     .      .  582: 	if (check == -1)
+     .      .  583:           {
+     .      .  584: 	     fprintf(stderr, "ERROR: clock_gettime begin failed\n");
+     .      .  585: 	  }
+     .      .  586:         threadtime_c[*num][k] += (threadtime_e[*num].tv_sec - threadtime_s[*num].tv_sec) * 1000000000 + (threadtime_e[*num].tv_nsec - threadtime_s[*num].tv_nsec);
+     .      .  587: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  588: 	SortedList_delete(curr);
+     .      .  589: 	pthread_mutex_unlock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  590: 	break;
+     .      .  591:       case 's':
+    56     56  592: 	while(__sync_lock_test_and_set(&sub_spin_lock[e_hash[*num][k]], 1));
+     .     25  593: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  594: 	SortedList_delete(curr);
+     .      .  595: 	__sync_lock_release(&sub_spin_lock[e_hash[*num][k]]);
+     .      .  596: 	break;
+     .      .  597:       default: 
+     .      .  598: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  599: 	SortedList_delete(curr);       
+     .      .  600:       }
+     .      .  601:     }
+     .      .  602:        
+     .      .  603:        return NULL;
+     .      .  604: }
+---
+     .      .  605: 
+     .      .  606: void freesubs()
+     .      .  607: {
+     .      .  608:   free(sub_spin_lock);
+     .      .  609:   free(sub_mutex_lock);

@@ -1,0 +1,182 @@
+Total: 222 samples
+     176  79.3%  79.3%      222 100.0% thread_func2
+      34  15.3%  94.6%       34  15.3% __strcmp_sse42
+       5   2.3%  96.8%       29  13.1% SortedList_insert
+       4   1.8%  98.6%       17   7.7% SortedList_lookup
+       3   1.4% 100.0%        3   1.4% _init
+       0   0.0% 100.0%      222 100.0% __clone
+       0   0.0% 100.0%      222 100.0% start_thread
+ROUTINE ====================== thread_func2 in /u/eng/class/classave/cs111/lab2/lab2b/lab2_list.c
+   176    222 Total samples (flat / cumulative)
+     .      .  464:   return temp;
+     .      .  465:   
+     .      .  466: }
+     .      .  467: 
+     .      .  468: void* thread_func2(void* arg)
+---
+     .      .  469: {
+     .      .  470:  
+     .      .  471:    int k = 0;
+     .      .  472:   int* num = (int*) arg;
+     .      .  473:   // printf("++++++++++++++++++++++++num %d\n", *num);
+     .      .  474:   SortedListElement_t* curr;
+     .      .  475:   for (k = 0; k < niters; k++)
+     .      .  476:     {
+     .      .  477:       switch(synchro)
+     .      .  478:       {
+     .      .  479:       case 'm':
+     .      .  480: 	pthread_mutex_lock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  481: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  482: 	pthread_mutex_unlock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  483: 	break;
+     .      .  484:       case 's':
+   148    148  485: 	while(__sync_lock_test_and_set(&sub_spin_lock[e_hash[*num][k]], 1));
+     .     29  486: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  487: 	__sync_lock_release(&sub_spin_lock[e_hash[*num][k]]);
+     .      .  488: 	break;
+     .      .  489:       default:
+     .      .  490: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  491:       }
+     .      .  492:     }
+     .      .  493:   
+     .      .  494:   counter = 0;
+     .      .  495:        switch(synchro)
+     .      .  496:       {
+     .      .  497:       case 'm':
+     .      .  498: 	for (k = 0; k < num_lists; k++)
+     .      .  499: 	  {
+     .      .  500: 	    pthread_mutex_lock(&sub_mutex_lock[k]);
+     .      .  501: 	    counter+=SortedList_length(sub_list[k]);
+     .      .  502: 	    pthread_mutex_unlock(&sub_mutex_lock[k]);
+     .      .  503: 	  }
+     .      .  504: 	break;
+     .      .  505:       case 's':
+     .      .  506: 	for (k = 0; k < num_lists; k++)
+     .      .  507: 	  {
+     2      2  508: 	    while(__sync_lock_test_and_set(&sub_spin_lock[k], 1));
+     .      .  509: 	    counter+=SortedList_length(sub_list[k]); 
+     .      .  510: 	    __sync_lock_release(&sub_spin_lock[k]);
+     .      .  511: 	  }
+     .      .  512: 	break;
+     .      .  513:       default:
+     .      .  514: 	for (k = 0; k < num_lists; k++)
+     .      .  515: 	  counter+=SortedList_length(sub_list[k]); 
+     .      .  516:       }
+     .      .  517:         
+     .      .  518:        for (k = 0; k < niters; k++)
+     .      .  519:     {
+     .      .  520:       switch(synchro)
+     .      .  521:       {
+     .      .  522:       case 'm':
+     .      .  523: 	pthread_mutex_lock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  524: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  525: 	SortedList_delete(curr);
+     .      .  526: 	pthread_mutex_unlock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  527: 	break;
+     .      .  528:       case 's':
+    26     26  529: 	while(__sync_lock_test_and_set(&sub_spin_lock[e_hash[*num][k]], 1));
+     .     17  530: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  531: 	SortedList_delete(curr);
+     .      .  532: 	__sync_lock_release(&sub_spin_lock[e_hash[*num][k]]);
+     .      .  533: 	break;
+     .      .  534:       default: 
+     .      .  535: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  536: 	SortedList_delete(curr);       
+     .      .  537:       }
+     .      .  538:     }
+     .      .  539:        
+     .      .  540:        return NULL;
+     .      .  541: }
+---
+     .      .  542: 
+     .      .  543: void freesubs()
+     .      .  544: {
+     .      .  545:   free(sub_spin_lock);
+     .      .  546:   free(sub_mutex_lock);
+ROUTINE ====================== thread_func2 in /u/eng/class/classave/cs111/lab2/lab2b/lab2_list.c
+   176    222 Total samples (flat / cumulative)
+     .      .  464:   return temp;
+     .      .  465:   
+     .      .  466: }
+     .      .  467: 
+     .      .  468: void* thread_func2(void* arg)
+---
+     .      .  469: {
+     .      .  470:  
+     .      .  471:    int k = 0;
+     .      .  472:   int* num = (int*) arg;
+     .      .  473:   // printf("++++++++++++++++++++++++num %d\n", *num);
+     .      .  474:   SortedListElement_t* curr;
+     .      .  475:   for (k = 0; k < niters; k++)
+     .      .  476:     {
+     .      .  477:       switch(synchro)
+     .      .  478:       {
+     .      .  479:       case 'm':
+     .      .  480: 	pthread_mutex_lock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  481: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  482: 	pthread_mutex_unlock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  483: 	break;
+     .      .  484:       case 's':
+   148    148  485: 	while(__sync_lock_test_and_set(&sub_spin_lock[e_hash[*num][k]], 1));
+     .     29  486: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  487: 	__sync_lock_release(&sub_spin_lock[e_hash[*num][k]]);
+     .      .  488: 	break;
+     .      .  489:       default:
+     .      .  490: 	SortedList_insert(sub_list[e_hash[*num][k]], &(e_arr[*num][k])); 
+     .      .  491:       }
+     .      .  492:     }
+     .      .  493:   
+     .      .  494:   counter = 0;
+     .      .  495:        switch(synchro)
+     .      .  496:       {
+     .      .  497:       case 'm':
+     .      .  498: 	for (k = 0; k < num_lists; k++)
+     .      .  499: 	  {
+     .      .  500: 	    pthread_mutex_lock(&sub_mutex_lock[k]);
+     .      .  501: 	    counter+=SortedList_length(sub_list[k]);
+     .      .  502: 	    pthread_mutex_unlock(&sub_mutex_lock[k]);
+     .      .  503: 	  }
+     .      .  504: 	break;
+     .      .  505:       case 's':
+     .      .  506: 	for (k = 0; k < num_lists; k++)
+     .      .  507: 	  {
+     2      2  508: 	    while(__sync_lock_test_and_set(&sub_spin_lock[k], 1));
+     .      .  509: 	    counter+=SortedList_length(sub_list[k]); 
+     .      .  510: 	    __sync_lock_release(&sub_spin_lock[k]);
+     .      .  511: 	  }
+     .      .  512: 	break;
+     .      .  513:       default:
+     .      .  514: 	for (k = 0; k < num_lists; k++)
+     .      .  515: 	  counter+=SortedList_length(sub_list[k]); 
+     .      .  516:       }
+     .      .  517:         
+     .      .  518:        for (k = 0; k < niters; k++)
+     .      .  519:     {
+     .      .  520:       switch(synchro)
+     .      .  521:       {
+     .      .  522:       case 'm':
+     .      .  523: 	pthread_mutex_lock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  524: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  525: 	SortedList_delete(curr);
+     .      .  526: 	pthread_mutex_unlock(&sub_mutex_lock[e_hash[*num][k]]);
+     .      .  527: 	break;
+     .      .  528:       case 's':
+    26     26  529: 	while(__sync_lock_test_and_set(&sub_spin_lock[e_hash[*num][k]], 1));
+     .     17  530: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  531: 	SortedList_delete(curr);
+     .      .  532: 	__sync_lock_release(&sub_spin_lock[e_hash[*num][k]]);
+     .      .  533: 	break;
+     .      .  534:       default: 
+     .      .  535: 	curr = SortedList_lookup(sub_list[e_hash[*num][k]], e_arr[*num][k].key);
+     .      .  536: 	SortedList_delete(curr);       
+     .      .  537:       }
+     .      .  538:     }
+     .      .  539:        
+     .      .  540:        return NULL;
+     .      .  541: }
+---
+     .      .  542: 
+     .      .  543: void freesubs()
+     .      .  544: {
+     .      .  545:   free(sub_spin_lock);
+     .      .  546:   free(sub_mutex_lock);

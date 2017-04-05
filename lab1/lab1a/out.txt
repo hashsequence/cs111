@@ -1,0 +1,28 @@
+total 112
+drwxr-xr-x 4 classave class  4096 Jan 20 18:49 .
+drwxr-xr-x 3 classave class  4096 Jan 17 17:08 ..
+-rw-r--r-- 1 classave class     1 Jan 18 23:29 err.txt
+-rw-r--r-- 1 classave class    55 Jan 18 21:57 err.txt~
+-rw-r--r-- 1 classave class    15 Jan 20 14:28 in.txt
+-rw-r--r-- 1 classave class    28 Jan 18 23:50 in.txt~
+-rwxr-xr-x 1 classave class 14136 Jan 18 22:54 lab1a
+-rw-r--r-- 1 classave class  8090 Jan 20 18:49 lab1a.c
+-rw-r--r-- 1 classave class  8092 Jan 20 18:49 lab1a.c~
+-rw-r--r-- 1 classave class     2 Jan 18 02:42 #lab1a.cclear#
+-rwxr-xr-x 1 classave class  7000 Jan 18 17:54 lab1agrade.sh
+drwxr-xr-x 2 classave class  4096 Jan 20 18:07 lab1areadergradingtempdir
+-rw-r--r-- 1 classave class     0 Jan 18 18:44 lab1a.sh
+drwxr-xr-x 3 classave class  4096 Jan 18 22:28 lab1atest
+-rw-r--r-- 1 classave class   314 Jan 18 23:04 Makefile
+-rw-r--r-- 1 classave class   313 Jan 18 23:04 Makefile~
+-rw-r--r-- 1 classave class  1506 Jan 20 18:49 out.txt
+-rw-r--r-- 1 classave class    28 Jan 20 14:27 out.txt~
+-rw-r--r-- 1 classave class   359 Jan 18 23:57 README
+-rw-r--r-- 1 classave class   226 Jan 18 23:54 README~
+-rwxr-xr-x 1 classave class 18312 Jan 20 18:49 simpsh
+-rwxr-xr-x 1 classave class   158 Jan 18 04:05 testscript1.sh
+-rwxr-xr-x 1 classave class   156 Jan 18 03:26 testscript1.sh~
+-rwxr-xr-x 1 classave class  1398 Jan 18 23:43 testscript.sh
+-rwxr-xr-x 1 classave class  1389 Jan 18 23:43 testscript.sh~
+ipt.sh
+-rwxr-xr-x 1 classave class  1389 Jan 18 23:43 testscript.sh~

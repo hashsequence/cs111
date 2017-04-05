@@ -1,0 +1,66 @@
+#!/bin/sh
+
+NUM_PASSED=0
+NUM_FAILED=0
+
+touch a.txt
+touch b.txt
+touch c.txt
+
+echo "cat in the hat" > a.txt
+
+./simpsh --rdonly a.txt --rdonly b.txt --wronly c.txt
+echo "first case tests if multiple rdonly works"
+if [ $? -ne 0 ]; then
+    NUM_FAILED=`expr $NUM_FAILED + 1`
+else
+    NUM_PASSED=`expr $NUM_PASSED + 1`
+    echo "first case passed"
+fi
+
+rm -rf a.txt b.txt c.txt
+touch a.txt
+touch b.txt
+touch c.txt
+echo "cat in the hat" > a.txt
+
+
+
+./simpsh --rdonly a.txt --rdonly b.txt --wronly c.txt
+diff b.txt c.txt
+echo "second case test that it should have error when attempting to write into read only file"
+if [ $? != 0 ]; then
+    NUM_FAILED=`expr $NUM_FAILED + 1`
+else
+    NUM_PASSED=`expr $NUM_PASSED + 1`
+    echo "second case passed"
+fi
+
+rm -rf a.txt b.txt c.txt
+touch a.txt
+touch b.txt
+touch c.txt
+echo "cat in the hat" > a.txt
+
+echo "third case test if error is produced when command have less than four arguments"
+./simpsh --rdonly a.txt --rdonly b.txt --wronly c.txt --command 0 1 2
+
+if [ $? -ne 1 ]; then
+    NUM_FAILED=`expr $NUM_FAILED + 1`
+else
+    NUM_PASSED=`expr $NUM_PASSED + 1`
+    echo "first case passed"
+fi
+
+rm -rf a.txt b.txt c.txt
+touch a.txt
+touch b.txt
+touch c.txt
+echo "cat in the hat" > a.txt
+./simpsh --rdonly a.txt --rdonly b.txt --wronly c.txt --command 0 1 2 ls -l
+cat b.txt
+rm -rf a.txt b.txt c.txt simpsh
+
+
+
+echo "$NUM_PASSED test passed and $NUM_FAILED test failed"

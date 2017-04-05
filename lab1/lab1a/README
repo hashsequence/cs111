@@ -1,0 +1,9 @@
+Avery Wong
+lab1a
+UID: 904 582 269
+cs111 winter 2017
+
+there are some limitations to my code such as since I didnt implement the functions to run --command one at a time
+since the parent process doesnt wait for the child process, I was in a process
+of doing so by starting to keep track of the proces id, but didnt use it yet
+which will be utilized in the lab1b

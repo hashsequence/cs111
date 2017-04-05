@@ -1,0 +1,7 @@
+default: lab1a
+
+lab1a: lab1a.c
+	gcc -g -o simpsh lab1a.c
+
+clean: 
+	rm -rf simpsh

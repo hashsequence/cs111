@@ -1,0 +1,48 @@
+AVERY WONG
+904582269
+WINTER 2017
+EGGERT
+
+Makefile includes:
+
+clean:
+	removes my executables and tarball generated
+
+lab4_1:
+	generates lab4 part1 executable
+
+lab4_2:
+	generates lab4 part2 executable
+
+lab4_3:
+	generates lab4 part3 executable
+
+p1:
+	generates executable then run executable for lab4 part1
+	outputs a part1.log
+
+p2:
+p3:
+	same as p1 execept for their respective executables and generates
+	part2.log and part3.log respectively
+
+tarball:
+	generates tarball with the following files:
+	lab4_part1.c
+	lab4_part2.c
+	lab4_part3.c
+	part1.log
+	part2.log
+	part3.log
+	Makefile
+	README
+
+********************Notes****************************
+
+for part2 and part3 for every fwrite I execute in my loop in my thread_write I am sending:
+
+"904582269 TEMP = XX.X\n\0"
+
+and I am logging
+
+"HH:MM:SS XX.X\n"

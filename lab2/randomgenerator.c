@@ -1,0 +1,20 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<time.h>
+
+int main(int argc, char** argv)
+{
+
+  int i = 0;
+  int  num;
+  char c[] = "a";
+  srand(time(NULL));
+  for (i = 0; i < 100; i++)
+    {
+      num  = rand() % (255+1-32)+32;
+      c[0] = (char)num;
+      printf("%s \n", c);
+    }
+
+}

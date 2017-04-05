@@ -1,0 +1,8 @@
+File descriptor old: 3 && fileIndex: 0
+File descriptor old: 4 && fileIndex: 1
+File descriptor old: 5 && fileIndex: 2
+sleep 0.01 
+
+file descriptors 3 4 5
+cmd: sleep
+argv[0]: 0.01

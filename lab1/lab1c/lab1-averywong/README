@@ -1,0 +1,26 @@
+Avery Wong
+UID: 904 582 269
+cs111 winter 2017
+ 
+some limitations to this code is that I there might be some obscure error cases i didnt account for.
+IF the child process never returns then simpsh wille hang forever, but I already account for closing
+all the file descriptors before waitpid
+
+lab1c:
+I have included the following in my file:
+lab1c.c
+README
+Makefile
+testscript.sh
+lab1cbenchmark.pdf
+
+the tests were used for my benchmartk, I copied all the data into data.txt.
+All my benchmarks were run on lnxsrv09.
+
+For timing I used /usr/bin/time to get the extra usage data from 
+bash and dash scripts which I learned from the man pages
+
+Also the total of parent and child process timesd b is what I used for the benchmark times
+
+In my pdf I wrote a note at the end, which should be disregarded because I didnt know you didnt
+have to include my testscripts so I removed them

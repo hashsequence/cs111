@@ -1,0 +1,52 @@
+AVERY WONG
+UID: 904 582 260
+WINTER 2017
+CS111 EGGERT PAUL
+
+To check my output I basically used the diff command with the sample 
+solution csv files 
+
+basically I put all the sample solutions into a directory then
+ran a script:
+
+diff -u <my.csv> <sample.csv>
+
+and check if it was the same
+
+In my code, to make things more readable I wrote 6 functions that parses
+the given disk image into the required 6 csv files so it would be more readable
+
+There are some limitations to this code as I assume the block offset was
+always 1024 and that I did not cover all possible test cases.
+
+My main method to parse the disk image was create a struct that 
+was similar to the one in ext2.h and that I used pread 
+to read the data to the struct.
+
+The hard part was getting the correct offset, especially with
+the indirect block pointers, but I realized that the address
+stored in the block pointers indicated the block number so I just
+multiplied the block size by the block nunmber to the required 
+offset.
+
+In the code you might see that I had a for loop that uses a bitmask
+to read each bit as pread can only read at least one byte at a time, and I 
+did not try to read the whole block at once as I wanted to read into
+the struct so I can print the variables more easily. So my implementation
+was more focused on readibility of code rather than optimization.
+
+In my tarball I have the following:
+
+lab3a.c : is the module source code
+
+Makefile:
+	You my notice there are the "mt" and td" options
+	that were used to test the disk-image and run
+	my diff -u script, so those options won't work
+	unless you have the specific files already in 
+	your working directory
+	
+	make dist creates the tarball with lab3a.c Makefile and README
+	make clean deletes csv files and lab3a executable
+	make compiles lab3a.c
+

@@ -1,0 +1,8 @@
+#!/bin/bash
+if grep -q 'bash' /proc/$$/cmdline ;
+then
+    echo "This is bash"
+else
+    echo "This is some other shell"
+fi
+

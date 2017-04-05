@@ -1,0 +1,119 @@
+#! /usr/bin/gnuplot
+#
+# purpose:
+#	 generate data reduction graphs for the multi-threaded list project
+#
+# input: lab2_list.csv
+#	1. test name
+#	2. # threads
+#	3. # iterations per thread
+#	4. # lists
+#	5. # operations performed (threads x iterations x (ins + lookup + delete))
+#	6. run time (ns)
+#	7. run time per operation (ns)
+#
+# output:
+#	lab2_list-1.png ... cost per operation vs threads and iterations
+#	lab2_list-2.png ... threads and iterations that run (un-protected) w/o failure
+#	lab2_list-3.png ... threads and iterations that run (protected) w/o failure
+#	lab2_list-4.png ... cost per operation vs number of threads
+#
+# Note:
+#	Managing data is simplified by keeping all of the results in a single
+#	file.  But this means that the individual graphing commands have to
+#	grep to select only the data they want.
+#
+
+# general plot parameters
+set terminal png
+set datafile separator ","
+
+set title "Graph 1: throughput vs number of threads"
+set xlabel "Threads"
+set logscale x 2
+unset xrange
+set xrange [0.75:]
+set ylabel "throughput"
+set logscale y 10
+set output 'lab2b_1.png'
+set key left top
+plot \
+     "< grep list-none-m,.*,1000,1, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'mutex list' with linespoints lc rgb 'green', \
+     "< grep list-none-s,.*,1000,1, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'spin list' with linespoints lc rgb 'blue', \
+     "< grep add-m lab2_add.csv" using ($2):(1000000000/($6)) \
+     	title 'add mutex' with linespoints lc rgb 'red', \
+     "< grep add-s lab2_add.csv" using ($2):(1000000000/($6)) \
+     	title 'add spin' with linespoints lc rgb 'orange'
+
+set title "Graph 2: mean time per mutex wait and mean time per \n operation for mutex-synchronized list operations"
+set xlabel "Threads"
+set logscale x 2
+unset xrange
+set xrange [0.75:]
+set ylabel "mean time"
+set logscale y 10
+set output 'lab2b_2.png'
+set key left top
+plot \
+     "< grep list-none-m,.*,1000,1, lab_2b_list.csv" using ($2):($8) \
+     title 'mean time per mutex wait' with linespoints lc rgb 'green', \
+     "< grep list-none-m,.*,1000,1, lab_2b_list.csv" using ($2):($7) \
+     title 'mean time per op' with linespoints lc rgb 'blue' \
+	
+set title "Graph3: number of successful iterations for each synchronization method"
+set xlabel "Threads"
+set logscale x 2
+unset xrange
+set xrange [0.75:]
+set ylabel "successful iterations"
+set logscale y 10
+set output 'lab2b_3.png'
+plot \
+     "< grep list-id-s lab_2b_list.csv" using ($2):($3) \
+     title 'yield=id, sync=s' with points lc rgb 'blue', \
+     "< grep list-id-s lab_2b_list.csv" using ($2):($3) \
+     title 'yield=id, sync=m' with points lc rgb 'red', \
+     "< grep list-id-none lab_2b_list.csv" using ($2):($3) \
+     title 'yield=id' with points lc rgb 'green' \
+
+set title "Graph 4: throughput vs number of threads for mutex with multiple lists"
+set xlabel "Threads"
+set logscale x 2
+unset xrange
+set xrange [0.75:14]
+set ylabel "throughput"
+set logscale y 10
+set output 'lab2b_4.png'
+set key left top
+plot \
+     "< grep list-none-m,.*,1, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'mutex list lists=1' with linespoints lc rgb 'green', \
+     "< grep list-none-m,.*,4, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'mutex list lists=4' with linespoints lc rgb 'red', \
+     "< grep list-none-m,.*,8, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'mutex list lists=8' with linespoints lc rgb 'pink', \
+     "< grep list-none-m,.*,16, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'mutex list lists=16' with linespoints lc rgb 'blue' \
+
+set title "Graph 5: throughput vs number of threads for spin locks with multiple lists"
+set xlabel "Threads"
+set logscale x 2
+unset xrange
+set xrange [0.75:14]
+set ylabel "throughput"
+set logscale y 10
+set output 'lab2b_5.png'
+set key left top
+plot \
+     "< grep list-none-s,.*,1, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'spin list lists=1' with linespoints lc rgb 'green', \
+     "< grep list-none-s,.*,4, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'spin list lists=4' with linespoints lc rgb 'red', \
+     "< grep list-none-s,.*,8, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'spin list lists=8' with linespoints lc rgb 'pink', \
+     "< grep list-none-s,.*,16, lab_2b_list.csv" using ($2):(1000000000/($7)) \
+     	title 'spin list lists=16' with linespoints lc rgb 'blue', \
+
+

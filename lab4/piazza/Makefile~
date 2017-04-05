@@ -1,0 +1,28 @@
+#-lmraa -I/usr/bin/openssl
+default: build
+
+build: lab4_part1 lab4_part2 lab4_3
+
+lab4_1: lab4_part1.c
+	gcc -o lab4_1 -Wall -g -lm -lpthread -lmraa lab4_part1.c
+
+lab4_2: lab4_part2.c
+	gcc -o lab4_2 -Wall -g -lm -lpthread  lab4_part2.c
+
+lab4_3: lab4_part3.c
+	gcc -o lab4_3 -Wall -g -lm -lpthread -lcrypto -lssl lab4_part3.c
+	
+clean:
+	rm -rf lab4_1 lab4_2 lab4_3 lab4-904582269.tar.gz
+	
+p1: lab4_1
+	./lab4_1
+
+p2: lab4_2
+	./lab4_2
+	
+p3: lab4_3
+	./lab4_3
+
+tarball: lab4_part1.c lab4_part2.c lab4_part3.c lab4_1.log lab4_2.log lab4_3.log Makefile
+	tar -czvf lab4-904582269.tar.gz lab4_part1.c lab4_part2.c lab4_part3.c lab4_1.log lab4_2.log lab4_3.log Makefile

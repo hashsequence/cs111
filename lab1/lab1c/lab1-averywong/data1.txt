@@ -1,0 +1,651 @@
+-----------------------------lab1c tests-------------------------------------------------
+==============================ITERATION 1===============================================================================================
+------------------------test 1-----------------------------------------------------------
+++++++simpsh+++++
+	0 cat
+0 tr A-Z a-z
+0 tr -sd b d
+Profile of total for parent and children processes
+user cpu time:                   0.001424s
+system cpu time:                 0.001649s
+max resident size:               1188kB
+page reclaims(soft page faults): 904
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         0
+voluntary context switches:      16
+involuntary context switches:    4
+
+---------------------test 2-------------------------------------------------------------
+++++++++simpsh+++
+0 head -c 1MB /dev/urandom
+0 tr -s A-Z a-z
+0 cat
+Profile of total for parent and children processes
+user cpu time:                   0.009885s
+system cpu time:                 0.111585s
+max resident size:               1232kB
+page reclaims(soft page faults): 920
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         1952
+voluntary context switches:      464
+involuntary context switches:    19
+
+---------------------------test 3-------------------------------------------------------
+++++++++simpsh+++++++
+ fold -w 500001
+0 head -n 1
+ tr -dc a-zA-Z0-9
+ cat /dev/urandom
+Profile of total for parent and children processes
+user cpu time:                   0.024677s
+system cpu time:                 0.438134s
+max resident size:               1844kB
+page reclaims(soft page faults): 1360
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         984
+voluntary context switches:      705
+involuntary context switches:    13
+
+------------------------------------------------------------------
+==============================ITERATION 2===============================================================================================
+------------------------test 1-----------------------------------------------------------
+++++++simpsh+++++
+0 cat
+0 tr A-Z a-z
+0 tr -sd b d
+Profile of total for parent and children processes
+user cpu time:                   0.000000s
+system cpu time:                 0.003368s
+max resident size:               1184kB
+page reclaims(soft page faults): 904
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         0
+voluntary context switches:      18
+involuntary context switches:    4
+
+---------------------test 2-------------------------------------------------------------
+++++++++simpsh+++	  
+0 head -c 1MB /dev/urandom
+0 tr -s A-Z a-z
+0 cat
+Profile of total for parent and children processes
+user cpu time:                   0.009367s
+system cpu time:                 0.114067s
+max resident size:               1232kB
+page reclaims(soft page faults): 922
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         1952
+voluntary context switches:      387
+involuntary context switches:    19
+
+---------------------------test 3-------------------------------------------------------
+++++++++simpsh+++++++
+ fold -w 500001
+0 head -n 1
+ tr -dc a-zA-Z0-9
+ cat /dev/urandom
+Profile of total for parent and children processes
+user cpu time:                   0.028982s
+system cpu time:                 0.430867s
+max resident size:               1840kB
+page reclaims(soft page faults): 1359
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         984
+voluntary context switches:      660
+involuntary context switches:    15
+
+------------------------------------------------------------------
+==============================ITERATION 3===============================================================================================
+------------------------test 1-----------------------------------------------------------
+++++++simpsh+++++
+0 cat
+0 tr -sd b d
+0 tr A-Z a-z
+Profile of total for parent and children processes
+user cpu time:                   0.001132s
+system cpu time:                 0.002351s
+max resident size:               1188kB
+page reclaims(soft page faults): 903
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         0
+voluntary context switches:      20
+involuntary context switches:    4
+
+---------------------test 2-------------------------------------------------------------
+++++++++simpsh+++
+0 head -c 1MB /dev/urandom
+0 tr -s A-Z a-z
+0 cat
+Profile of total for parent and children processes
+user cpu time:                   0.009016s
+system cpu time:                 0.118754s
+max resident size:               1228kB
+page reclaims(soft page faults): 921
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         1952
+voluntary context switches:      306
+involuntary context switches:    19
+
+---------------------------test 3-------------------------------------------------------
+++++++++simpsh+++++++
+ fold -w 500001
+0 head -n 1
+ tr -dc a-zA-Z0-9
+ cat /dev/urandom
+Profile of total for parent and children processes
+user cpu time:                   0.032870s
+system cpu time:                 0.424131s
+max resident size:               1840kB
+page reclaims(soft page faults): 1361
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         984
+voluntary context switches:      693
+involuntary context switches:    12
+
+------------------------------------------------------------------
+==============================ITERATION 4===============================================================================================
+------------------------test 1-----------------------------------------------------------
+++++++simpsh+++++
+0 cat
+0 tr A-Z a-z
+0 tr -sd b d
+Profile of total for parent and children processes
+user cpu time:                   0.000000s
+system cpu time:                 0.003544s
+max resident size:               1188kB
+page reclaims(soft page faults): 909
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         0
+voluntary context switches:      16
+involuntary context switches:    4
+
+---------------------test 2-------------------------------------------------------------
+++++++++simpsh+++
+0 head -c 1MB /dev/urandom
+0 tr -s A-Z a-z
+0 cat
+Profile of total for parent and children processes
+user cpu time:                   0.012095s
+system cpu time:                 0.115872s
+max resident size:               1236kB
+page reclaims(soft page faults): 922
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         1952
+voluntary context switches:      304
+involuntary context switches:    22
+
+---------------------------test 3-------------------------------------------------------
+++++++++simpsh+++++++
+ fold -w 500001
+0 head -n 1
+ tr -dc a-zA-Z0-9
+ cat /dev/urandom
+Profile of total for parent and children processes
+user cpu time:                   0.026842s
+system cpu time:                 0.431034s
+max resident size:               1844kB
+page reclaims(soft page faults): 1361
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         984
+voluntary context switches:      685
+involuntary context switches:    13
+
+------------------------------------------------------------------
+==============================ITERATION 5===============================================================================================
+------------------------test 1-----------------------------------------------------------
+++++++simpsh+++++
+0 cat
+0 tr A-Z a-z
+0 tr -sd b d
+Profile of total for parent and children processes
+user cpu time:                   0.000000s
+system cpu time:                 0.003309s
+max resident size:               1184kB
+page reclaims(soft page faults): 904
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         0
+voluntary context switches:      16
+involuntary context switches:    4
+
+---------------------test 2-------------------------------------------------------------
+++++++++simpsh+++
+0 head -c 1MB /dev/urandom
+0 tr -s A-Z a-z
+0 cat
+Profile of total for parent and children processes
+user cpu time:                   0.009990s
+system cpu time:                 0.115651s
+max resident size:               1232kB
+page reclaims(soft page faults): 922
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         1952
+voluntary context switches:      351
+involuntary context switches:    19
+
+---------------------------test 3-------------------------------------------------------
+++++++++simpsh+++++++
+ fold -w 500001
+0 head -n 1
+ tr -dc a-zA-Z0-9
+ cat /dev/urandom
+Profile of total for parent and children processes
+user cpu time:                   0.017559s
+system cpu time:                 0.437605s
+max resident size:               1836kB
+page reclaims(soft page faults): 1358
+page faults(hard page faults:    0
+block input operations:          0
+block output operations:         984
+voluntary context switches:      690
+involuntary context switches:    13
+
+------------------------------------------------------------------
+==============================ITERATION 1===============================================================================================
+This is bash
+++++++++++++++++bash tests+++++++++++++
+---------------------test 1--------------------
+
+real			  0m0.002s
+user			  0m0.001s
+sys			  0m0.002s
+Max resident set size:	  640
+Block Input  0
+Block Output 0
+Page Reclaims:	206
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+---------------------test 2--------------------
+
+real			  0m0.115s
+user			  0m0.006s
+sys			  0m0.118s
+Max resident set size:	  708
+Block Input  0
+Block Output 0
+Page Reclaims:	224
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	3
+
+---------------------test 3--------------------
+
+real			  0m0.439s
+user			  0m0.027s
+sys			  0m0.436s
+Max resident set size:	  732
+Block Input  0
+Block Output 0
+Page Reclaims:	227
+Page Faults:	0
+Voluntary context switches:	258
+Involuntary context switches:	2
+
+==============================ITERATION 2===============================================================================================
+This is bash
+++++++++++++++++bash tests+++++++++++++
+---------------------test 1--------------------
+
+real			  0m0.002s
+user			  0m0.000s
+sys			  0m0.003s
+Max resident set size:	  644
+Block Input  0
+Block Output 0
+Page Reclaims:	207
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+---------------------test 2--------------------
+
+real			  0m0.116s
+user			  0m0.011s
+sys			  0m0.117s
+Max resident set size:	  708
+Block Input  0
+Block Output 0
+Page Reclaims:	225
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	1
+
+---------------------test 3--------------------
+
+real			  0m0.437s
+user			  0m0.031s
+sys			  0m0.429s
+Max resident set size:	  732
+Block Input  0
+Block Output 0
+Page Reclaims:	228
+Page Faults:	0
+Voluntary context switches:	260
+Involuntary context switches:	2
+
+==============================ITERATION 3===============================================================================================
+This is bash
+++++++++++++++++bash tests+++++++++++++
+---------------------test 1--------------------
+
+real			  0m0.002s
+user			  0m0.000s
+sys			  0m0.003s
+Max resident set size:	  640
+Block Input  0
+Block Output 0
+Page Reclaims:	207
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+---------------------test 2--------------------
+
+real			  0m0.116s
+user			  0m0.010s
+sys			  0m0.118s
+Max resident set size:	  708
+Block Input  0
+Block Output 0
+Page Reclaims:	226
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	1
+
+---------------------test 3--------------------
+
+real			  0m0.432s
+user			  0m0.028s
+sys			  0m0.427s
+Max resident set size:	  732
+Block Input  0
+Block Output 0
+Page Reclaims:	227
+Page Faults:	0
+Voluntary context switches:	258
+Involuntary context switches:	3
+
+==============================ITERATION 4===============================================================================================
+This is bash
+++++++++++++++++bash tests+++++++++++++
+---------------------test 1--------------------
+
+real			  0m0.002s
+user			  0m0.000s
+sys			  0m0.003s
+Max resident set size:	  640
+Block Input  0
+Block Output 0
+Page Reclaims:	207
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+---------------------test 2--------------------
+
+real			  0m0.116s
+user			  0m0.014s
+sys			  0m0.115s
+Max resident set size:	  712
+Block Input  0
+Block Output 0
+Page Reclaims:	226
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	1
+
+---------------------test 3--------------------
+
+real			  0m0.437s
+user			  0m0.028s
+sys			  0m0.433s
+Max resident set size:	  732
+Block Input  0
+Block Output 0
+Page Reclaims:	227
+Page Faults:	0
+Voluntary context switches:	258
+Involuntary context switches:	1
+
+==============================ITERATION 5===============================================================================================
+This is bash
+++++++++++++++++bash tests+++++++++++++
+---------------------test 1--------------------
+
+real			  0m0.002s
+user			  0m0.000s
+sys			  0m0.004s
+Max resident set size:	  644
+Block Input  0
+Block Output 0
+Page Reclaims:	208
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+---------------------test 2--------------------
+
+real			  0m0.113s
+user			  0m0.011s
+sys			  0m0.109s
+Max resident set size:	  708
+Block Input  0
+Block Output 0
+Page Reclaims:	224
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	1
+
+---------------------test 3--------------------
+
+real			  0m0.436s
+user			  0m0.023s
+sys			  0m0.437s
+Max resident set size:	  732
+Block Input  0
+Block Output 0
+Page Reclaims:	227
+Page Faults:	0
+Voluntary context switches:	260
+Involuntary context switches:	2
+
+==============================ITERATION 1===============================================================================================
+++++++++++++++++dash tests+++++++++++++
+---------------------test 1--------------------
+0m0.000000s 0m0.000000s
+0m0.000000s 0m0.000000s
+Max resident set size:	640
+Block Input  0
+Block Output 0
+Page Reclaims:	207
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 2--------------------
+0m0.000000s 0m0.000000s
+0m0.000000s 0m0.110000s
+Max resident set size:	700
+Block Input  0
+Block Output 0
+Page Reclaims:	222
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	1
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 3--------------------
+0m0.000000s 0m0.000000s
+0m0.020000s 0m0.430000s
+Max resident set size:	732
+Block Input  0
+Block Output 0
+Page Reclaims:	227
+Page Faults:	0
+Voluntary context switches:	258
+Involuntary context switches:	1
+
+==============================ITERATION 2===============================================================================================
+++++++++++++++++dash tests+++++++++++++
+---------------------test 1--------------------
+0m0.000000s 0m0.000000s
+0m0.000000s 0m0.000000s
+Max resident set size:	636
+Block Input  0
+Block Output 0
+Page Reclaims:	205
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 2--------------------
+0m0.000000s 0m0.000000s
+0m0.010000s 0m0.110000s
+Max resident set size:	700
+Block Input  0
+Block Output 0
+Page Reclaims:	222
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	2
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 3--------------------
+0m0.000000s 0m0.000000s
+0m0.020000s 0m0.420000s
+Max resident set size:	732
+Block Input  0
+Block Output 0
+Page Reclaims:	227
+Page Faults:	0
+Voluntary context switches:	260
+Involuntary context switches:	2
+
+==============================ITERATION 3===============================================================================================
+++++++++++++++++dash tests+++++++++++++
+---------------------test 1--------------------
+0m0.000000s 0m0.000000s
+0m0.000000s 0m0.000000s
+Max resident set size:	640
+Block Input  0
+Block Output 0
+Page Reclaims:	206
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 2--------------------
+0m0.000000s 0m0.000000s
+0m0.000000s 0m0.110000s
+Max resident set size:	704
+Block Input  0
+Block Output 0
+Page Reclaims:	223
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	1
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 3--------------------
+0m0.000000s 0m0.000000s
+0m0.010000s 0m0.430000s
+Max resident set size:	728
+Block Input  0
+Block Output 0
+Page Reclaims:	227
+Page Faults:	0
+Voluntary context switches:	258
+Involuntary context switches:	3
+
+==============================ITERATION 4===============================================================================================
+++++++++++++++++dash tests+++++++++++++
+---------------------test 1--------------------
+0m0.000000s 0m0.000000s
+0m0.000000s 0m0.000000s
+Max resident set size:	636
+Block Input  0
+Block Output 0
+Page Reclaims:	207
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	1
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 2--------------------
+0m0.000000s 0m0.000000s
+0m0.010000s 0m0.110000s
+Max resident set size:	700
+Block Input  0
+Block Output 0
+Page Reclaims:	223
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	2
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 3--------------------
+0m0.000000s 0m0.000000s
+0m0.020000s 0m0.430000s
+Max resident set size:	728
+Block Input  0
+Block Output 0
+Page Reclaims:	227
+Page Faults:	0
+Voluntary context switches:	258
+Involuntary context switches:	1
+
+==============================ITERATION 5===============================================================================================
+++++++++++++++++dash tests+++++++++++++
+---------------------test 1--------------------
+0m0.000000s 0m0.000000s
+0m0.000000s 0m0.000000s
+Max resident set size:	640
+Block Input  0
+Block Output 0
+Page Reclaims:	206
+Page Faults:	0
+Voluntary context switches:	3
+Involuntary context switches:	2
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 2--------------------
+0m0.000000s 0m0.000000s
+0m0.000000s 0m0.110000s
+Max resident set size:	704
+Block Input  0
+Block Output 0
+Page Reclaims:	224
+Page Faults:	0
+Voluntary context switches:	2
+Involuntary context switches:	1
+
+++++++++++++++++dash tests+++++++++++++
+---------------------test 3--------------------
+0m0.000000s 0m0.000000s
+0m0.030000s 0m0.420000s
+Max resident set size:	732
+Block Input  0
+Block Output 0
+Page Reclaims:	228
+Page Faults:	0
+Voluntary context switches:	258
+Involuntary context switches:	3
+

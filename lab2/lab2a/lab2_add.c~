@@ -1,0 +1,223 @@
+#define _GNU_SOURCE
+#include<stdio.h>
+#include<stdlib.h>
+#include<pthread.h>
+#include<getopt.h>
+#include<time.h>
+#include<string.h>
+
+int niters = 1;
+int nthreads = 1;
+int opt_yield = 0;
+int my_synch_lock = 0;
+char synchro;
+pthread_mutex_t my_mutex_lock;
+
+
+void add(long long *pointer, long long value)
+{
+  long long sum = *pointer + value;
+  if (opt_yield)
+    pthread_yield();
+  *pointer = sum;
+}
+
+void add_c(long long*pointer, long long value)
+{
+  long long old;
+  long long new;
+  do{
+  old = *pointer;
+  new = old + value;
+  if(opt_yield)
+    {
+      pthread_yield();
+    }
+  }while( (__sync_val_compare_and_swap(pointer,old,new)) != old);
+}
+
+void* thread_func(void* arg)
+{
+  int k = 0;
+
+  for (k = 0; k < niters; k++)
+    {
+      switch(synchro)
+	{
+	case 'm':
+	  pthread_mutex_lock(&my_mutex_lock);
+	  add((long long*)arg, 1);
+	  pthread_mutex_unlock(&my_mutex_lock);
+	  break;
+	case 's':
+	  while(__sync_lock_test_and_set(&my_synch_lock, 1));
+	  add((long long *)arg, 1);
+	  __sync_lock_release(&my_synch_lock);
+	  break;
+	case 'c':
+	  add_c((long long *)arg, 1);
+	  break;
+	default:
+	  add((long long *)arg, 1);
+	  break;
+	}
+    }
+
+  for (k = 0; k < niters; k++)
+    {
+      switch(synchro)
+	{
+	case 'm':
+	  pthread_mutex_lock(&my_mutex_lock);
+	  add((long long*)arg, -1);
+	  pthread_mutex_unlock(&my_mutex_lock);
+	  break;
+	case 's':
+	  while(__sync_lock_test_and_set(&my_synch_lock, 1));
+	  add((long long *)arg, -1);
+	  __sync_lock_release(&my_synch_lock);
+	  break;
+	case 'c':
+	  add_c((long long *)arg, -1);
+	  break;
+	default:
+	  add((long long *)arg, -1);
+	  break;
+	}
+    }
+
+  return NULL;
+}
+
+int main(int argc, char** argv)
+{
+  int d;
+  int option_index;
+  long long counter = 0;
+  pthread_t *threads;  
+  int k, check;
+
+  struct timespec begin, end;
+  char nameroot[]="add";
+  char name_default[] = "-none";
+  char name_yield[] = "-yield";
+  char name_m[] = "-m";
+  char name_s[] = "-s";
+  char name_c[] = "-c";
+  char name_0[] = "";
+  char *name_dy = name_default;
+  char *name_synch = name_0;
+  long  num_of_operations = 0;
+  long  tot_run_time = 0;
+  long  avg_time_per_op = 0;
+ 
+  
+  static struct option long_options[]=
+    {
+      {"threads", required_argument, 0,'t'},
+      {"iterations", required_argument, 0, 'i'},
+      {"yield", no_argument, &opt_yield, 1},
+      {"sync", required_argument, 0, 's'},
+      {0,0,0,0}
+    };
+
+  while((d = getopt_long(argc,argv,"t:i:", long_options, &option_index)) != -1)
+    {
+      switch(d)
+	{
+	case 0:
+	  if (opt_yield)
+	    {
+	      name_dy = name_yield;
+	    }
+	  break;
+	case 't':
+	  nthreads = atoi(optarg);
+	  break;
+	case 'i':
+	  niters = atoi(optarg);
+	  break;
+	case 's':
+	  if (strlen(optarg)!= 1 || (optarg[0] != 'm' && optarg[0] != 's' && optarg[0] !='c'))
+	    {
+	      fprintf(stderr, "ERROR: synch argument has to be  either m, s, or c\n");
+	      exit(1);
+	    }
+	  synchro = optarg[0];
+	  if (synchro == 'm')
+	    {
+	      if (opt_yield == 0)
+		name_dy = name_0;
+	      name_synch = name_m;
+	    }
+	  else if (synchro == 's')
+	    {
+	      if (opt_yield == 0)
+		name_dy = name_0;
+	      name_synch = name_s;
+	    }
+	  else if (synchro == 'c')
+	    {
+	      if (opt_yield == 0)
+		name_dy = name_0;
+	      name_synch = name_c;
+	    }
+	  else;
+	  break;
+	default:
+	  fprintf(stderr,"ERROR: option not available\n");
+       }
+    }
+  if (synchro == 'm')
+  {
+    pthread_mutex_init(&my_mutex_lock, NULL);
+  }
+
+  threads = (pthread_t*)malloc(sizeof(pthread_t)*nthreads);
+ 
+  if(threads == NULL)
+    {
+      fprintf(stderr, "error allocating memory\n");
+      exit(1);
+    }
+
+  check = clock_gettime(CLOCK_MONOTONIC, &begin);
+  if (check == -1)
+    {
+      fprintf(stderr,"ERROR: clock_gettime begin failed\n");
+      exit(1);
+    }
+  for (k = 0; k < nthreads; k++)
+    {
+      check = pthread_create(&threads[k], NULL, thread_func, &counter);
+      if (check != 0)
+	{
+	  fprintf(stderr, "ERROR: creating threads, return value: %d \n",check);
+	  exit(1);
+	}
+    }
+
+  for (k = 0; k < nthreads; k++)
+    {
+      check = pthread_join(threads[k],NULL);
+      if (check != 0)
+	{
+	  fprintf(stderr, "ERROR: joining threads, return value: %d \n",check);
+	  exit(1);
+	}
+    }
+  
+  check = clock_gettime(CLOCK_MONOTONIC, &end);
+  if (check == -1)
+    {
+      fprintf(stderr,"ERROR: clock_gettime end failed\n");
+      exit(1);
+    }
+  
+num_of_operations = nthreads * niters * 2;
+tot_run_time = (end.tv_sec - begin.tv_sec) * 1000000000 + (end.tv_nsec - begin.tv_nsec);
+avg_time_per_op = tot_run_time / num_of_operations;
+
+ printf("%s%s%s,%d,%d,%d,%d,%d,%d\n", nameroot, name_dy, name_synch, nthreads, niters, num_of_operations,tot_run_time,avg_time_per_op,counter);
+exit(0);
+}

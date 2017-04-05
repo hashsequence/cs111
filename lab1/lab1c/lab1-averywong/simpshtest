@@ -1,0 +1,74 @@
+#!/bin/sh
+
+export PATH=/usr/local/cs/bin:$PATH
+make clean
+make
+echo "-----------------------------lab1c tests-------------------------------------------------" 
+max=5
+for (( i=1; i <= $max; ++i ))
+do
+    echo "==============================ITERATION $i==============================================================================================="
+echo "------------------------test 1-----------------------------------------------------------"
+echo "++++++simpsh+++++"
+touch e
+touch x
+./simpsh \
+--creat --rdonly z \
+--pipe \
+--pipe \
+--wronly x \
+--wronly e \
+--command 0 2 6 cat \
+--command 1 4 6 tr A-Z a-z \
+--command 3 5 6 tr -sd 'b' 'd' \
+--close 2 \
+--close 4 \
+--profile \
+--wait; \
+rm -rf e x z
+echo "---------------------test 2-------------------------------------------------------------"; \
+echo "++++++++simpsh+++"
+touch a; \
+./simpsh \
+--rdonly a \
+--creat --wronly f \
+--creat --wronly c \
+--pipe \
+--pipe \
+--command 0 4 2 head -c 1MB /dev/urandom \
+--command 3 6 2 tr -s A-Z a-z \
+--command 5 1 2 cat \
+--close 4 \
+--close 6 \
+--profile \
+--wait; \
+rm -rf a c f
+
+echo "---------------------------test 3-------------------------------------------------------"; \
+echo "++++++++simpsh+++++++"
+./simpsh \
+--creat --rdwr e \
+--pipe --pipe --pipe \
+--creat --rdwr out \
+--command 0 2 7 cat /dev/urandom --command 1 4 7 tr -dc 'a-zA-Z0-9' --command 3 6 7 fold -w 500000 --command 5 7 7 head -n 1 --profile --wait; \
+
+rm -rf e out
+
+
+echo "------------------------------------------------------------------"
+done 
+for (( i=1; i <= $max; ++i ))
+do
+    echo "==============================ITERATION $i==============================================================================================="
+./bashtest
+done
+#export PATH=/usr/local/cs/:$PATH 
+for (( i=1; i <= $max; ++i ))
+do
+    echo "==============================ITERATION $i==============================================================================================="
+dash ./dashtest1
+dash ./dashtest2
+dash ./dashtest3
+done
+#export PATH=/usr/local/cs/bin:$PATH
+make clean

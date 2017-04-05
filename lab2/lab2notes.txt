@@ -1,0 +1,87 @@
+pthread_join
+pthread_yield
+pthread_create
+pthread_exit
+
+clock_gettime
+
+struct timespec
+{
+
+};
+
+use CLOCK_MONTONIC
+
+wall time vs cpu time
+
+wall time, in real life, alpha 
+cpu time, time of cpu, beta
+
+alpha < beta can happen when we have multiple threads
+alpha == beta when there is a single thread
+alpha > beta when there is overhead from other funtions and io
+or when you have a pipe but there is a block for a minute, the cpu time will stop 
+but real time continues
+
+gnuplot 5
+
+do not use 4
+
+
+ 
+lab2_add
+
+1)o prep
+start time calloc
+
+2)start all threads 
+
+for loop
+   add()
+
+3) wait endtime
+--------
+----------------------------------------------------------------
+
+2.1.1.1
+
+use a for loop to investigate the list ,  spin lock cost more time on cpu using a normal cpu with 4 cores
+on seasnet the mutex is slower than because the cost of creating 16 threads. the spin lock will take waste cpu time, thats why it takes forever the actual should be between 16 to 160 the mutex time 
+spinlock should 
+
+q2.2.2
+a
+the list is lower than the add function
+if we check the original result the cost is much higher than the add function
+obviously list operations are much longer than add so should have higher cost 
+per operation
+
+lab2b
+========================================================================
+
+2.3.1 
+most of the cycles should be spent in th elocks for 1 and 2 threads tests, 
+but no actual data, so they are roughly equal, 
+
+for high thread and spin locks i believe most of the cycles are spent in
+the locks because a spin lock keeps spinning until its unlock
+
+for a mutex most of the time is spent in the mutex lock, if you cant get a lock you are put into a queue and wait 
+
+if there are a lot threads each threads has less operatinos to do, but 
+what is the average cost per operation
+
+2.3.2 
+threads competing for locks
+
+why does the completion time 
+
+how is the wait time larger than completion time
+completetion is time per operation
+
+2.3.4
+
+more threads less throughput
+
+
+

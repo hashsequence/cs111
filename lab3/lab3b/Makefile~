@@ -1,0 +1,9 @@
+tarball: lab3b.py README
+	tar -czvf lab3b-904582269.tar.gz lab3b.py README
+
+clean:
+	rm -rf lab3b-904582269.tar.gz lab3b_check.txt
+	
+exe:
+	chmod 755 lab3b.py
+	./lab3b.py

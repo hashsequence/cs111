@@ -1,0 +1,8 @@
+Avery Wong
+lab1a
+UID: 904 582 269
+cs111 winter 2017
+
+some limitations to this code is that I there might be some obscure error cases i didnt account for.
+IF the child process never returns then simpsh will hang forever, but I already account for closing
+all the file descriptors before waitpid

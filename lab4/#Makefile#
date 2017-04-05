@@ -1,0 +1,7 @@
+default: build
+
+build: lab4.c
+	gcc -o lab4 -Wall -lmath -lmraa-g -lm lab4.c
+
+clean:
+	rm -rf lab4

@@ -1,0 +1,18 @@
+AVERY WONG
+UID: 904 582 269
+EGGERT CS111 WINTER 2017
+
+FILES INCLUDE:
+
+MAKEFILE
+contents of make file
+
+exe: 
+     add chmod 755 permission to my python script, lab3b.py
+     runs the python script 
+
+clean: 
+       removes lab3b_check.txt genereated by python script and the tarball
+
+tarball:
+	puts lab3b.py and README and Makefile into tarball

@@ -1,0 +1,2 @@
+--verbose
+--command 0 1 2 sleep 0.01

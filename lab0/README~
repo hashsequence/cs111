@@ -1,0 +1,48 @@
+AVERY WONG
+ID: 904 582 269
+CS111 WINTER 2107
+EGGERT
+
+
+
+In this project I was not familiar with thr getopt() and make check, 
+especially when scripting tests into a make file, so I looked up these
+tutorials and examples on how to utilize them. (The references are listed 
+below), everything else I refered to the hw/labs I did in cs33 and cs35l
+
+	The test cases I tested where testing the following:
+./lab0 --input in.txt 
+./lab0 --input.txt in.txt --output out.txt 
+./lab0 --segfault
+./lab0 --segfault --catch
+
+For the Make file the default option make should
+only produce the executable lab0
+
+check will test the four cases above, I used a counter to check
+whether each case will pass or not and if all case pass, then
+the last line of the output will say "all smoke test passed"
+
+dist will produce the tarball with the following files:
+lab0.c
+part5backtrace.png
+part6nullptr.png
+Makefile
+README
+
+references:
+https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
+
+http://www.informit.com/articles/article.aspx?p=175771&seqNum=3
+
+https://linuxprograms.wordpress.com/2012/06/22/c-getopt-example/
+
+https://www.gnu.org/software/libc/manual/html_node/Getopt-Long-Option-Example.html
+
+http://www.cs.colby.edu/maxwell/courses/tutorials/maketutor/
+
+https://bash.cyberciti.biz/guide/Numeric_comparison
+
+https://blog.melski.net/2010/11/15/shell-commands-in-gnu-make/
+
+https://bash.cyberciti.biz/guide/Perform_arithmetic_operations

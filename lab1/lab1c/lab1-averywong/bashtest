@@ -1,0 +1,22 @@
+#!/bin/bash
+
+./checkshell
+echo "++++++++++++++++bash tests+++++++++++++"
+echo "---------------------test 1--------------------"
+touch z 
+time cat z | tr A-Z a-z | tr -sd 'b' 'a' > y; \
+
+/usr/bin/time -f "Max resident set size:\t%M\nBlock Input\t%I\nBlock Output\t%O\nPage Reclaims:\t%R\nPage Faults:\t%F\nVoluntary context switches:\t%w\nInvoluntary context switches:\t%c\n" cat z | tr A-Z a-z | tr -sd 'b' 'a' > y
+rm -rf z y
+echo "---------------------test 2--------------------"
+time head -c 1MB /dev/urandom | tr -s A-Z a-z | cat > b
+
+/usr/bin/time -f "Max resident set size:\t%M\nBlock Input\t%I\nBlock Output\t%O\nPage Reclaims:\t%R\nPage Faults:\t%F\nVoluntary context switches:\t%w\nInvoluntary context switches:\t%c\n"\
+ head -c 1MB /dev/urandom | tr -s A-Z a-z | cat > b
+rm b
+echo "---------------------test 3--------------------"
+time cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 500000 | head -n 1 > a
+/usr/bin/time -f "Max resident set size:\t%M\nBlock Input\t%I\nBlock Output\t%O\nPage Reclaims:\t%R\nPage Faults:\t%F\nVoluntary context switches:\t%w\nInvoluntary context switches:\t%c\n" cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 500000 | head -n 1 > a
+rm -rf a  
+
+
